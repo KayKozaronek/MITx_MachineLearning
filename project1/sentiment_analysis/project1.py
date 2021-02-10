@@ -316,7 +316,16 @@ def classify(feature_matrix, theta, theta_0):
     be considered a positive classification.
     """
     # Your code here
-    raise NotImplementedError
+    classified_array = np.array([])
+    for i in range(feature_matrix.shape[0]):
+        feature_vector = feature_matrix[i]
+        if np.dot(feature_vector, theta) + theta_0 > 0:
+            classified_array = np.append(classified_array, 1)
+        else:
+            classified_array = np.append(classified_array, -1)
+
+    return classified_array
+
 #pragma: coderesponse end
 
 
@@ -354,7 +363,18 @@ def classifier_accuracy(
     accuracy of the trained classifier on the validation data.
     """
     # Your code here
-    raise NotImplementedError
+    # Train classifier
+    theta, theta_0 = classifier(train_feature_matrix, train_labels, **kwargs)
+    
+    # Make predictions 
+    train_preds = classify(train_feature_matrix, theta, theta_0)
+    val_preds = classify(val_feature_matrix, theta, theta_0)
+
+    # Calculate accuracy
+    train_acc = accuracy(train_preds, train_labels)
+    val_acc = accuracy(val_preds, val_labels)
+
+    return (train_acc, val_acc)
 #pragma: coderesponse end
 
 
@@ -383,10 +403,19 @@ def bag_of_words(texts):
     """
     # Your code here
     dictionary = {} # maps word to unique index
+
+    # Additional code for stopword removal
+    stopwords_file = open("stopwords.txt", "r")
+    content = stopwords_file.read()
+    stopwords = content.split("\n")
+    stopwords_file.close()
+    
     for text in texts:
         word_list = extract_words(text)
         for word in word_list:
-            if word not in dictionary:
+            if word in stopwords:
+                continue
+            elif word not in dictionary:
                 dictionary[word] = len(dictionary)
     return dictionary
 #pragma: coderesponse end
@@ -412,7 +441,7 @@ def extract_bow_feature_vectors(reviews, dictionary):
         word_list = extract_words(text)
         for word in word_list:
             if word in dictionary:
-                feature_matrix[i, dictionary[word]] = 1
+                feature_matrix[i, dictionary[word]] = 1 # try +=
     return feature_matrix
 #pragma: coderesponse end
 
