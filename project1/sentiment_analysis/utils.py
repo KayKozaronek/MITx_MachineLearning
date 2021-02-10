@@ -110,6 +110,12 @@ def plot_toy_data(algo_name, features, labels, thetas):
     # show the plot
     algo_name = ' '.join((word.capitalize() for word in algo_name.split(' ')))
     plt.suptitle('Classified Toy Data ({})'.format(algo_name))
+    
+    # makes comparison easier
+    # plt.ylim([-4,5]) 
+    # plt.xlim([-4,5])
+    # plt.grid(True, linestyle=':')
+
     plt.show()
 
 def plot_tune_results(algo_name, param_name, param_vals, acc_train, acc_val):
